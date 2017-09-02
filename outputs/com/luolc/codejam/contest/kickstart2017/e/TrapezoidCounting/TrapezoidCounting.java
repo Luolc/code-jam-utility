@@ -1,5 +1,6 @@
 package com.luolc.codejam.contest.kickstart2017.e;
 
+import com.luolc.codejam.algorithm.BinarySearch;
 import com.luolc.codejam.tool.io.Parser;
 import com.luolc.codejam.tool.solution.Solution;
 import com.luolc.codejam.tool.solution.Solver;
@@ -65,16 +66,19 @@ final class TrapezoidCounting implements Parser<TrapezoidCounting.Input>, Soluti
       for (int j = 1; j < input.nums.size(); j++) {
         if (i == j) continue;
         final Num down = input.nums.get(j);
-        int l = 0;
-        int r = j - 1;
-        final long boundary = down.val - 2 * side.val;
-        while (l < r) {
-          final int mid = Math.floorDiv(l + r, 2);
-          if (input.nums.get(mid).val <= boundary) l = mid + 1;
-          else r = mid;
-        }
+//        int l = 0;
+//        int r = j - 1;
+//        final long boundary = down.val - 2 * side.val;
+//        while (l < r) {
+//          final int mid = Math.floorDiv(l + r, 2);
+//          if (input.nums.get(mid).val <= boundary) l = mid + 1;
+//          else r = mid;
+//        }
+        final int l = BinarySearch.largerThan(
+            0, j - 1, down.val - 2 * side.val, idx -> input.nums.get(idx).val);
+        if (l == j) continue;
         final Num up = input.nums.get(l);
-        if (up.val + 2 * side.val <= down.val) continue;
+//        if (up.val + 2 * side.val <= down.val) continue;
         long sum = input.sum[j] - input.sum[l];
         if (i >= l && i < j) sum -= side.count;
         ans += arg * down.count * sum;
